@@ -208,37 +208,80 @@ $(document).ready(function () {
         let playerResult;
         let aiResult;
         let weights;
-        let i;
+
         //todo minimax
         //_MINIMAX_DEPTH
+        // for (i = 1; i <= _COL_COUNT; i++) {
+        //     rightElemnent = getRightElement($("[data-element=" + i + "]"));
+        //     rightElemnent.addClass("active-ai").addClass("active").addClass("think");
+        //     _TURN_STATUS = "player";
+        //
+
+        //Begin from end
+        // aiResult = checkWin("active-ai", "future");
+        // playerResult = checkWin("active-player", "future");
+        //
+        // if (aiResult === true) {
+        //     weights = 1;
+        // } else if (playerResult === true) {
+        //     weights = -1;
+        // } else {
+        //     weights = 0;
+        // }
+
+        // for (i = 1; i <= _COL_COUNT; i++) {
+        //     for (i = 1; i <= _COL_COUNT; i++) {
+        //         for (i = 1; i <= _COL_COUNT; i++) {
+        //
+        //         }
+        //     }
+        // }
+
+        //     $(".think").removeClass("active-player").removeClass("active-ai").removeClass("active").removeClass("think");
+        // }
+        //
+
+
+        let tree = [];
+
+        let i;
+        let o;
+        let p;
+        let a;
+
+        //Tree with levels
         for (i = 1; i <= _COL_COUNT; i++) {
-            rightElemnent = getRightElement($("[data-element=" + i + "]"));
-            rightElemnent.addClass("active-ai").addClass("active").addClass("think");
-            _TURN_STATUS = "player";
+            console.log(i);
+            tree["level_1_turn_" + i] = {"value": i, "next_level": []};
+
+            var arrayLevel2 = [];
+            for (o = 1; o <= _COL_COUNT; o++) {
+                arrayLevel2["level_2_turn_" + o] = {"value": o, "next_level": []};
 
 
-            //Begin from end
-            // aiResult = checkWin("active-ai", "future");
-            // playerResult = checkWin("active-player", "future");
-            //
-            // if (aiResult === true) {
-            //     weights = 1;
-            // } else if (playerResult === true) {
-            //     weights = -1;
-            // } else {
-            //     weights = 0;
-            // }
+                var arrayLevel3 = [];
+                for (p = 1; p <= _COL_COUNT; p++) {
+                    arrayLevel3["level_3_turn_" + p] = {"value": p, "next_level": []};
 
-            // for (i = 1; i <= _COL_COUNT; i++) {
-            //     for (i = 1; i <= _COL_COUNT; i++) {
-            //         for (i = 1; i <= _COL_COUNT; i++) {
-            //
-            //         }
-            //     }
-            // }
 
-            $(".think").removeClass("active-player").removeClass("active-ai").removeClass("active").removeClass("think");
+                    var arrayLevel4 = [];
+                    for (a = 1; a <= _COL_COUNT; a++) {
+                        arrayLevel4["level_4_turn_" + a] = {"value": a, "next_level": []};
+                    }
+                    arrayLevel3["level_3_turn_" + p]["next_level"] = arrayLevel4;
+
+
+                }
+                arrayLevel2["level_2_turn_" + o]["next_level"] = arrayLevel3;
+
+            }
+            tree["level_1_turn_" + i]["next_level"] = arrayLevel2;
         }
+
+        console.log(tree);
+
+
+        //TODO Проверит результа снизу раставляя весы и пропускать варианты в Error
 
         // $(".think").removeClass("active-player").removeClass("active-ai").removeClass("active").removeClass("think");
         return getRandomInt(7) + 1;
