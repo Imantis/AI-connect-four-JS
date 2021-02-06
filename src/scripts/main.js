@@ -6,7 +6,7 @@ $(document).ready(function () {
     const _ROW_COUNT = 6;
     const _COL_COUNT = 7;
 
-    const _MINIMAX_DEPTH = 5;
+    const _MINIMAX_DEPTH = 4;
 
     let rightElemnent;
 
@@ -79,10 +79,10 @@ $(document).ready(function () {
 
         $(".active").removeClass("active-player").removeClass("active-ai").removeClass("active");
 
-        //TODO minimax
+        aiTurn();
     });
 
-    function checkWin(playerOrAIName) {
+    function checkWin(playerOrAIName, type) {
         let roundsInRow = 0;
         let winStatus = false;
         let playerOrAIRounds = $("." + playerOrAIName);
@@ -105,7 +105,7 @@ $(document).ready(function () {
             }
         });
 
-        if (winStatus) {
+        if (winStatus && type !== "future") {
             if (playerOrAIRounds.first().hasClass("active-player")) {
                 alert("Player win!");
             } else if (playerOrAIRounds.first().hasClass("active-ai")) {
@@ -114,6 +114,8 @@ $(document).ready(function () {
 
             $(".element").addClass("active");
         }
+
+        return winStatus;
 
 
     }
@@ -149,6 +151,7 @@ $(document).ready(function () {
         if ($(this).hasClass("active")) {
             return;
         }
+        let winStatus = false;
 
         if (_TURN_STATUS === "player") {
             rightElemnent = getRightElement($(this));
@@ -158,23 +161,86 @@ $(document).ready(function () {
             } else {
                 rightElemnent.addClass("active-player").addClass("active");
                 _TURN_STATUS = "ai";
-                checkWin("active-player");
+                winStatus = checkWin("active-player");
             }
+
+            if (!winStatus) {
+                aiTurn();
+            }
+
         } else {
 
-            //TODO COMMENT!
-            rightElemnent = getRightElement($(this));
-
-
-            if (rightElemnent === "error") {
-                alert("Error");
-            } else {
-                rightElemnent.addClass("active-ai").addClass("active");
-                _TURN_STATUS = "player";
-                checkWin("active-ai");
-            }
+            // //Second player
+            // rightElemnent = getRightElement($(this));
+            //
+            //
+            // if (rightElemnent === "error") {
+            //     alert("Error");
+            // } else {
+            //     rightElemnent.addClass("active-ai").addClass("active");
+            //     _TURN_STATUS = "player";
+            //     checkWin("active-ai");
+            // }
         }
     });
 
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
 
+    function aiTurn() {
+        let click_choose = minimaxChoose();
+
+        rightElemnent = getRightElement($("[data-element=" + click_choose + "]"));
+
+        if (rightElemnent === "Error") {
+            alert(rightElemnent);
+        } else {
+            rightElemnent.addClass("active-ai").addClass("active");
+            _TURN_STATUS = "player";
+            checkWin("active-ai");
+        }
+    }
+
+    function minimaxChoose() {
+        let roadExamples = [];
+        let roadBest = [];
+        let playerResult;
+        let aiResult;
+        let weights;
+        let i;
+        //todo minimax
+        //_MINIMAX_DEPTH
+        for (i = 1; i <= _COL_COUNT; i++) {
+            rightElemnent = getRightElement($("[data-element=" + i + "]"));
+            rightElemnent.addClass("active-ai").addClass("active").addClass("think");
+            _TURN_STATUS = "player";
+
+
+            //Begin from end
+            // aiResult = checkWin("active-ai", "future");
+            // playerResult = checkWin("active-player", "future");
+            //
+            // if (aiResult === true) {
+            //     weights = 1;
+            // } else if (playerResult === true) {
+            //     weights = -1;
+            // } else {
+            //     weights = 0;
+            // }
+
+            // for (i = 1; i <= _COL_COUNT; i++) {
+            //     for (i = 1; i <= _COL_COUNT; i++) {
+            //         for (i = 1; i <= _COL_COUNT; i++) {
+            //
+            //         }
+            //     }
+            // }
+
+            $(".think").removeClass("active-player").removeClass("active-ai").removeClass("active").removeClass("think");
+        }
+
+        // $(".think").removeClass("active-player").removeClass("active-ai").removeClass("active").removeClass("think");
+        return getRandomInt(7) + 1;
+    }
 });
