@@ -1,0 +1,22 @@
+.ui-container {
+  border-radius: 10px;
+  background-color: #FFFFFF;
+  margin: 20px auto 20px auto;
+  width: 928px;
+  max-width: 100%;
+  display: flex;
+  color: #9E9E9E;
+
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.btn {
+  max-width: 200px;
+  margin: 10px auto;
+}
+
+h2 {
+  text-align: center;
+}
