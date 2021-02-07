@@ -1,11 +1,11 @@
 * {
   font-family: "Open Sans", sans-serif; }
   * body {
-    background-color: #F5F5F5 !important; }
+    background-color: grey !important; }
 
 .board-container {
   border-radius: 10px;
-  background-color: #FFFFFF;
+  background-color: black;
   margin: 20px auto 20px auto;
   height: 720px;
   width: 928px;
@@ -48,7 +48,7 @@
 
 .ui-container {
   border-radius: 10px;
-  background-color: #FFFFFF;
+  background-color: black;
   margin: 20px auto 20px auto;
   width: 928px;
   max-width: 100%;

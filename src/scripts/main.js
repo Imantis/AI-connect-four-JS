@@ -12,6 +12,8 @@ $(document).ready(function () {
 
     var winExamples = [];
 
+    var tableData = [];
+
     function winCombinationSearch() {
         //Win in row
         let i;
@@ -64,6 +66,9 @@ $(document).ready(function () {
     $(".element").each(function (index) {
         $(this).attr("data-element", index + 1);
         $(this).append(index + 1);
+
+        //Status - empty - active-ai - active-player
+        tableData[index + 1] = "empty";
     });
 
     $("[data-restart-game-first-player]").click(function () {
@@ -89,10 +94,10 @@ $(document).ready(function () {
 
         winExamples.forEach((winCombination) => {
             winCombination.forEach((element) => {
-                if ($("[data-element=" + element + "]").hasClass(playerOrAIName)) {
+
+                // if ($("[data-element=" + element + "]").hasClass(playerOrAIName)) {
+                if (tableData[element] === playerOrAIName) {
                     roundsInRow++;
-                    // console.log(winCombination);
-                    // console.log(roundsInRow);
                 } else {
                     roundsInRow = 0;
                     return null;
@@ -160,27 +165,38 @@ $(document).ready(function () {
                 alert(rightElemnent);
             } else {
                 rightElemnent.addClass("active-player").addClass("active");
+
+                tableData[rightElemnent.attr("data-element")] = "active-player";
+
+
                 _TURN_STATUS = "ai";
                 winStatus = checkWin("active-player");
             }
 
             if (!winStatus) {
                 aiTurn();
+                // setTimeout(() => {
+                //     aiTurn();
+                // }, 1);
             }
 
         } else {
 
             // //Second player
-            // rightElemnent = getRightElement($(this));
-            //
-            //
-            // if (rightElemnent === "error") {
-            //     alert("Error");
-            // } else {
-            //     rightElemnent.addClass("active-ai").addClass("active");
-            //     _TURN_STATUS = "player";
-            //     checkWin("active-ai");
-            // }
+            rightElemnent = getRightElement($(this));
+
+
+            if (rightElemnent === "error") {
+                alert("Error");
+            } else {
+                rightElemnent.addClass("active-ai").addClass("active");
+
+                tableData[rightElemnent.attr("data-element")] = "active-ai";
+
+
+                _TURN_STATUS = "player";
+                checkWin("active-ai");
+            }
         }
     });
 
@@ -198,92 +214,196 @@ $(document).ready(function () {
         } else {
             rightElemnent.addClass("active-ai").addClass("active");
             _TURN_STATUS = "player";
+
+            tableData[rightElemnent.attr("data-element")] = "active-ai";
+
             checkWin("active-ai");
         }
     }
 
     function minimaxChoose() {
+        console.log("Turn status on start " + _TURN_STATUS);
         let roadExamples = [];
         let roadBest = [];
         let playerResult;
         let aiResult;
-        let weights;
-
-        //todo minimax
-        //_MINIMAX_DEPTH
-        // for (i = 1; i <= _COL_COUNT; i++) {
-        //     rightElemnent = getRightElement($("[data-element=" + i + "]"));
-        //     rightElemnent.addClass("active-ai").addClass("active").addClass("think");
-        //     _TURN_STATUS = "player";
-        //
-
-        //Begin from end
-        // aiResult = checkWin("active-ai", "future");
-        // playerResult = checkWin("active-player", "future");
-        //
-        // if (aiResult === true) {
-        //     weights = 1;
-        // } else if (playerResult === true) {
-        //     weights = -1;
-        // } else {
-        //     weights = 0;
-        // }
-
-        // for (i = 1; i <= _COL_COUNT; i++) {
-        //     for (i = 1; i <= _COL_COUNT; i++) {
-        //         for (i = 1; i <= _COL_COUNT; i++) {
-        //
-        //         }
-        //     }
-        // }
-
-        //     $(".think").removeClass("active-player").removeClass("active-ai").removeClass("active").removeClass("think");
-        // }
-        //
+        let weight;
+        let _TURN_STATUS_SAVE = $.extend(true, {}, _TURN_STATUS);
+        var tableDataSave = JSON.parse(JSON.stringify(tableData));
+        // let tableDataSave = tableData;
 
 
         let tree = [];
 
-        let i;
-        let o;
-        let p;
-        let a;
-
         //Tree with levels
-        for (i = 1; i <= _COL_COUNT; i++) {
-            console.log(i);
-            tree["level_1_turn_" + i] = {"value": i, "next_level": []};
+        tree = createTree(tree);
 
-            var arrayLevel2 = [];
-            for (o = 1; o <= _COL_COUNT; o++) {
-                arrayLevel2["level_2_turn_" + o] = {"value": o, "next_level": []};
+        // console.log(tree);
 
 
-                var arrayLevel3 = [];
-                for (p = 1; p <= _COL_COUNT; p++) {
-                    arrayLevel3["level_3_turn_" + p] = {"value": p, "next_level": []};
+        // stateScore = Math.min(...newStateScores);
+
+        let obj;
+        let el;
+        for (obj in tree) {
+            el = tree[obj];
+
+            // _TURN_STATUS = _TURN_STATUS_SAVE;
+
+            _TURN_STATUS = $.extend(true, {}, _TURN_STATUS_SAVE);
 
 
-                    var arrayLevel4 = [];
-                    for (a = 1; a <= _COL_COUNT; a++) {
-                        arrayLevel4["level_4_turn_" + a] = {"value": a, "next_level": []};
+            // console.log(tableData);
+
+            tableData = JSON.parse(JSON.stringify(tableDataSave));
+
+
+            // if (el["turn_combination"] == [3, 1, 3]) {
+            //     console.log("SEE WIN, please!");
+            // }
+
+            el["turn_combination"].forEach(element => {
+                //Check win status and set lowest weights
+
+                rightElemnent = getRightElement($("[data-element=" + element + "]"));
+
+                if (rightElemnent === "Error") {
+                    // alert(rightElemnent);
+                } else {
+                    playerResult = false;
+                    aiResult = false;
+
+                    // console.log(el["lev"] + " level=" + _TURN_STATUS + " turn - " + element);
+                    if (_TURN_STATUS === "player") {
+                        tableData[rightElemnent.attr("data-element")] = "active-player";
+
+                        playerResult = checkWin("active-player", "future");
+                        // aiResult = checkWin("active-ai", "future");
+
+                        _TURN_STATUS = "ai";
+                    } else {
+                        tableData[rightElemnent.attr("data-element")] = "active-ai";
+
+                        // playerResult = checkWin("active-player", "future");
+                        aiResult = checkWin("active-ai", "future");
+
+                        // if (el["turn_combination"] === [3, 1, 3]) {
+                        //     console.log("SEE WIN, please!");
+                        // }
+
+                        _TURN_STATUS = "player";
                     }
-                    arrayLevel3["level_3_turn_" + p]["next_level"] = arrayLevel4;
+
+                    if (aiResult === true) {
+                        weight = 1;
+                    } else if (playerResult === true) {
+                        weight = -1;
+                    } else {
+                        weight = 0;
+                    }
+                    // el["weight"] = weight;
+                    // ev_2_turn_4_4: {value: 4, weight: -1,
+                    // FIX WEIGHT FUTURE WHEN 4 4
+                    //В теории бот может поставить на 4 кружок, а потом моя 4 не даст победы, но он думает, что проиграет
 
 
+                    //TODO lev_3_turn_3_1_3: {value: 3, weight: 0,
+
+                    tree[obj]["weight"] = weight;
+                    // console.log(", weight - " + el["weight"]);
                 }
-                arrayLevel2["level_2_turn_" + o]["next_level"] = arrayLevel3;
 
-            }
-            tree["level_1_turn_" + i]["next_level"] = arrayLevel2;
+
+                // console.log(el["turn_combination"]);
+            });
+
+            // console.log(tree);
+
         }
 
+
+        // _TURN_STATUS = _TURN_STATUS_SAVE;
+        _TURN_STATUS = $.extend(true, {}, _TURN_STATUS_SAVE);
+
+        tableData = tableDataSave;
+        console.log(tableData);
         console.log(tree);
 
 
-        //TODO Проверит результа снизу раставляя весы и пропускать варианты в Error
+        let weightExamles = [];
 
-        // $(".think").removeClass("active-player").removeClass("active-ai").removeClass("active").removeClass("think");
-        return getRandomInt(7) + 1;
+
+        for (obj in tree) {
+            el = tree[obj];
+//TODO GET THE BEST ROUTE AND WATCH ALSO LEVEL
+            if (el["lev"] === 1 && el["weight"] === 1) {
+                roadBest = el["turn_combination"];
+                break;
+            }
+
+
+        }
+
+
+        if (roadBest[0]) {
+            console.log("AI MOVE!");
+            return roadBest[0];
+        } else {
+            // return getRandomInt(7) + 1;
+            return 3;
+        }
+
+    }
+
+    function createTree(tree) {
+        let i1;
+        let i2;
+        let i3;
+        let i4;
+        // let i5;
+        // let lev;
+
+//need recursive change
+        for (i1 = 1; i1 <= _COL_COUNT; i1++) {
+            if ($("[data-element=" + i1 + "]").hasClass("active")) {
+
+            } else {
+
+                tree["lev_" + 1 + "_turn_" + i1] = {"value": i1, "weight": null, "turn_combination": [i1], "lev": 1};
+                for (i2 = 1; i2 <= _COL_COUNT; i2++) {
+
+
+                    if ($("[data-element=" + i2 + "]").hasClass("active")) {
+
+                    } else {
+                        tree["lev_" + 2 + "_turn_" + i1 + "_" + i2] = {
+                            "value": i1,
+                            "weight": null,
+                            "turn_combination": [i1, i2],
+                            "lev": 2
+                        };
+                    }
+
+
+                    for (i3 = 1; i3 <= _COL_COUNT; i3++) {
+                        if ($("[data-element=" + i3 + "]").hasClass("active")) {
+
+                        } else {
+                            tree["lev_" + 3 + "_turn_" + i1 + "_" + i2 + "_" + i3] = {
+                                "value": i1,
+                                "weight": null,
+                                "turn_combination": [i1, i2, i3],
+                                "lev": 3
+                            };
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+        return tree;
+
     }
 });
