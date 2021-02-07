@@ -1,3 +1,5 @@
+//TODO FIX - ON AI RESTART - PLAYER WIN(Datatable)
+
 $(document).ready(function () {
 
     let _TURN_STATUS = "player";
@@ -332,6 +334,7 @@ $(document).ready(function () {
         let i2;
         let i3;
         let i4;
+        let i5;
         let weight;
         let turn_combination;
 
@@ -344,20 +347,22 @@ $(document).ready(function () {
                 weight = getWeight(turn_combination);
 
                 tree["lev_" + 1 + "_turn_" + i1] = {
-                    "value": i1,
+                    // "value": i1,
                     "weight": weight,
                     "turn_combination": turn_combination,
                     "lev": 1
                 };
                 for (i2 = 1; i2 <= _COL_COUNT; i2++) {
-                    turn_combination = [i1, i2];
-                    weight = getWeight(turn_combination);
+
 
                     if ($("[data-element=" + i2 + "]").hasClass("active")) {
 
                     } else {
+                        turn_combination = [i1, i2];
+                        weight = getWeight(turn_combination);
+
                         tree["lev_" + 2 + "_turn_" + i1 + "_" + i2] = {
-                            "value": i1,
+                            // "value": i1,
                             "weight": weight,
                             "turn_combination": turn_combination,
                             "lev": 2
@@ -375,12 +380,53 @@ $(document).ready(function () {
 
 
                             tree["lev_" + 3 + "_turn_" + i1 + "_" + i2 + "_" + i3] = {
-                                "value": i1,
+                                // "value": i1,
                                 "weight": weight,
                                 "turn_combination": turn_combination,
                                 "lev": 3
                             };
                         }
+
+
+                        for (i4 = 1; i4 <= _COL_COUNT; i4++) {
+                            if ($("[data-element=" + i4 + "]").hasClass("active")) {
+
+                            } else {
+
+                                turn_combination = [i1, i2, i3, i4];
+                                weight = getWeight(turn_combination);
+
+
+                                tree["lev_" + 4 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
+                                    // "value": i1,
+                                    "weight": weight,
+                                    "turn_combination": turn_combination,
+                                    "lev": 4
+                                };
+                            }
+
+
+                            // for (i5 = 1; i4 <= _COL_COUNT; i5++) {
+                            //     if ($("[data-element=" + i5 + "]").hasClass("active")) {
+                            //
+                            //     } else {
+                            //
+                            //         turn_combination = [i1, i2, i3, i4, i5];
+                            //         weight = getWeight(turn_combination);
+                            //
+                            //
+                            //         tree["lev_" + 5 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4 + "_" + i5] = {
+                            //             // "value": i1,
+                            //             "weight": weight,
+                            //             "turn_combination": turn_combination,
+                            //             "lev": 5
+                            //         };
+                            //     }
+                            // }
+
+
+                        }
+
                     }
 
 
