@@ -207,8 +207,12 @@ $(document).ready(function () {
                 winStatus = checkWin("active-player");
             }
 
+            //TODO CHECK GAME END
+
             if (!winStatus) {
                 aiTurn();
+                //TODO CHECK GAME END
+
                 // setTimeout(() => {
                 //     aiTurn();
                 // }, 1);
@@ -274,6 +278,8 @@ $(document).ready(function () {
 
         let obj;
         let el;
+
+        let best_move = 0;
         // console.log(tree);
 
 
@@ -288,52 +294,73 @@ $(document).ready(function () {
         console.log(tableData);
         console.log(tree);
 
-        //
-        // let weightExamles = [];
+        //TODO FIX THIS
+        // tree = setTreeWeight(3, tree);
+        tree = setTreeWeight(2, tree);
+        tree = setTreeWeight(1, tree);
 
 
+        // let i;
+        // for (i = 1; i < _MINIMAX_DEPTH; i++) {
+        //     // setTreeWeight(i, tree);
+        // }
+
+
+        console.log(tree);
+
+        //Search 1 result
         for (obj in tree) {
             el = tree[obj];
-//TODO GET THE BEST ROUTE AND WATCH ALSO LEVEL
+
             if (el["lev"] === 1 && el["weight"] === 1) {
-                roadBest = el["turn_combination"];
-                break;
-            }
-
-            if (el["lev"] === 1 && el["weight"] === 0) {
-                roadBest = el["turn_combination"];
-                break;
-            }
-
-            if (el["lev"] === 2 && el["weight"] === 1) {
-                roadBest = el["turn_combination"];
-                break;
-            }
-
-            if (el["lev"] === 2 && el["weight"] === 0) {
-                roadBest = el["turn_combination"];
-                break;
-            }
-
-            if (el["lev"] === 3 && el["weight"] === 1) {
-                roadBest = el["turn_combination"];
-                break;
-            }
-
-            if (el["lev"] === 3 && el["weight"] === 0) {
-                roadBest = el["turn_combination"];
-                break;
+                best_move = el["turn_combination"][0];
             }
         }
 
+        //Search 0 result
 
-        if (roadBest[0]) {
-            console.log("AI MOVE!");
-            return roadBest[0];
-        } else {
-            // return getRandomInt(7) + 1;
-            return 3;
+        if (best_move === 0) {
+            for (obj in tree) {
+
+                let weightList = [];
+
+                el = tree[obj];
+
+                if (el["lev"] === 1 && el["weight"] === 0) {
+                    best_move = el["turn_combination"][0];
+                }
+            }
         }
+
+        //Search -1 result
+        if (best_move === 0) {
+            for (obj in tree) {
+
+                let weightList = [];
+
+                el = tree[obj];
+
+                if (el["lev"] === 1 && el["weight"] === -1) {
+                    best_move = el["turn_combination"][0];
+                }
+            }
+        }
+
+        if (best_move === 0) {
+
+            // alert("Game finished");
+            // alert("Game finished");
+            best_move = 1;
+        }
+        // if (roadBest[0]) {
+        //     console.log("AI MOVE!");
+        //     return roadBest[0];
+        // } else {
+        //     // return getRandomInt(7) + 1;
+        //     return 3;
+        // }
+
+        return best_move;
 
     }
 
@@ -354,7 +381,8 @@ $(document).ready(function () {
                 turn_combination = [i1];
                 weight = getWeight(turn_combination);
 
-                tree["lev_" + 1 + "_turn_" + i1] = {
+                // tree["lev_" + 1 + "_turn_" + i1] = {
+                tree["turn_" + i1] = {
                     "weight": weight,
                     "turn_combination": turn_combination,
                     "lev": 1
@@ -367,7 +395,8 @@ $(document).ready(function () {
                             turn_combination = [i1, i2];
                             weight = getWeight(turn_combination);
 
-                            tree["lev_" + 2 + "_turn_" + i1 + "_" + i2] = {
+                            // tree["lev_" + 2 + "_turn_" + i1 + "_" + i2] = {
+                            tree["turn_" + i1 + "_" + i2] = {
                                 "weight": weight,
                                 "turn_combination": turn_combination,
                                 "lev": 2
@@ -380,7 +409,8 @@ $(document).ready(function () {
                                         turn_combination = [i1, i2, i3];
                                         weight = getWeight(turn_combination);
 
-                                        tree["lev_" + 3 + "_turn_" + i1 + "_" + i2 + "_" + i3] = {
+                                        // tree["lev_" + 3 + "_turn_" + i1 + "_" + i2 + "_" + i3] = {
+                                        tree["turn_" + i1 + "_" + i2 + "_" + i3] = {
                                             "weight": weight,
                                             "turn_combination": turn_combination,
                                             "lev": 3
@@ -394,7 +424,8 @@ $(document).ready(function () {
                                                     weight = getWeight(turn_combination);
 
 
-                                                    tree["lev_" + 4 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
+                                                    // tree["lev_" + 4 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
+                                                    tree["turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
                                                         "weight": weight,
                                                         "turn_combination": turn_combination,
                                                         "lev": 4
@@ -469,5 +500,65 @@ $(document).ready(function () {
         tableData = tableDataSave;
 
         return weight;
+    }
+
+    function setTreeWeight(level, tree) {
+        // Object.keys(tree).forEach(function (key) {
+        //     var value = tree[key];
+        //     console.log(key);
+        // });
+
+
+        // tree["turn_1"]["weight"] = 9;
+
+        let obj;
+        let el;
+        let i;
+        let roadBest = [];
+        let weightListBest = [];
+
+        for (obj in tree) {
+
+            let weightList = [];
+
+            el = tree[obj];
+
+            if (el["lev"] === level && el["weight"] === 0) {
+                // roadBest = el["turn_combination"];
+                // break;
+                for (i = 1; i <= _COL_COUNT; i++) {
+                    // console.log(obj + "_" + i);
+
+                    weightList.push(tree[obj + "_" + i]["weight"]);
+                }
+
+                if (level % 2) {
+
+                    //TODO MAYBE THERE ERROR
+                    // weightListBest.push(getMaxOfArray(weightList))
+                    tree[obj]["weight"] = getMaxOfArray(weightList);
+                    // tree[obj + "_" + i]["weight"] = getMinOfArray(weightList);
+                } else {
+                    // weightListBest.push(getMinOfArray(weightList))
+                    tree[obj]["weight"] = getMinOfArray(weightList);
+                    // tree[obj + "_" + i]["weight"] = getMaxOfArray(weightList);
+                }
+
+                // console.log(obj + "_" + i);
+                // tree[obj]["weight"] = 9;
+
+                // console.log(obj + "_" + i);
+            }
+        }
+
+        return tree;
+    }
+
+    function getMaxOfArray(numArray) {
+        return Math.max.apply(null, numArray);
+    }
+
+    function getMinOfArray(numArray) {
+        return Math.min.apply(null, numArray);
     }
 });
