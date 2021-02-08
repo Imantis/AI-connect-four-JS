@@ -350,6 +350,7 @@ $(document).ready(function () {
         for (i1 = 1; i1 <= _COL_COUNT; i1++) {
             // if (!$("[data-element=" + i1 + "]").hasClass("active")) {
             if (tableData[i1] === "empty") {
+                weight = 0;
                 turn_combination = [i1];
                 weight = getWeight(turn_combination);
 
@@ -358,48 +359,54 @@ $(document).ready(function () {
                     "turn_combination": turn_combination,
                     "lev": 1
                 };
-                for (i2 = 1; i2 <= _COL_COUNT; i2++) {
-                    if (tableData[i2] === "empty") {
-                        turn_combination = [i1, i2];
-                        weight = getWeight(turn_combination);
 
-                        tree["lev_" + 2 + "_turn_" + i1 + "_" + i2] = {
-                            "weight": weight,
-                            "turn_combination": turn_combination,
-                            "lev": 2
-                        };
+                if (weight === 0) {
+                    for (i2 = 1; i2 <= _COL_COUNT; i2++) {
+                        if (tableData[i2] === "empty") {
+                            weight = 0;
+                            turn_combination = [i1, i2];
+                            weight = getWeight(turn_combination);
 
-                        for (i3 = 1; i3 <= _COL_COUNT; i3++) {
-                            if (tableData[i3] === "empty") {
-                                turn_combination = [i1, i2, i3];
-                                weight = getWeight(turn_combination);
+                            tree["lev_" + 2 + "_turn_" + i1 + "_" + i2] = {
+                                "weight": weight,
+                                "turn_combination": turn_combination,
+                                "lev": 2
+                            };
 
-                                tree["lev_" + 3 + "_turn_" + i1 + "_" + i2 + "_" + i3] = {
-                                    "weight": weight,
-                                    "turn_combination": turn_combination,
-                                    "lev": 3
-                                };
-                                for (i4 = 1; i4 <= _COL_COUNT; i4++) {
-                                    if (tableData[i4] === "empty") {
-
-                                        turn_combination = [i1, i2, i3, i4];
+                            if (weight === 0) {
+                                for (i3 = 1; i3 <= _COL_COUNT; i3++) {
+                                    if (tableData[i3] === "empty") {
+                                        weight = 0;
+                                        turn_combination = [i1, i2, i3];
                                         weight = getWeight(turn_combination);
 
-
-                                        tree["lev_" + 4 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
+                                        tree["lev_" + 3 + "_turn_" + i1 + "_" + i2 + "_" + i3] = {
                                             "weight": weight,
                                             "turn_combination": turn_combination,
-                                            "lev": 4
+                                            "lev": 3
                                         };
+
+                                        if (weight === 0) {
+                                            for (i4 = 1; i4 <= _COL_COUNT; i4++) {
+                                                if (tableData[i4] === "empty") {
+                                                    weight = 0;
+                                                    turn_combination = [i1, i2, i3, i4];
+                                                    weight = getWeight(turn_combination);
+
+
+                                                    tree["lev_" + 4 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
+                                                        "weight": weight,
+                                                        "turn_combination": turn_combination,
+                                                        "lev": 4
+                                                    };
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
-
-
                         }
                     }
-
-
                 }
             }
         }
