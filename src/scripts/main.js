@@ -78,6 +78,10 @@ $(document).ready(function () {
         _TURN_STATUS = "player";
 
         $(".active").removeClass("active-player").removeClass("active-ai").removeClass("active");
+
+        $(".element").each(function (index) {
+            tableData[index + 1] = "empty";
+        });
     });
 
     $("[data-restart-game-first-ai]").click(function () {
@@ -85,6 +89,10 @@ $(document).ready(function () {
         _TURN_STATUS = "ai";
 
         $(".active").removeClass("active-player").removeClass("active-ai").removeClass("active");
+
+        $(".element").each(function (index) {
+            tableData[index + 1] = "empty";
+        });
 
         aiTurn();
     });
@@ -340,93 +348,55 @@ $(document).ready(function () {
 
 //need recursive change
         for (i1 = 1; i1 <= _COL_COUNT; i1++) {
-            if ($("[data-element=" + i1 + "]").hasClass("active")) {
-
-            } else {
+            // if (!$("[data-element=" + i1 + "]").hasClass("active")) {
+            if (tableData[i1] === "empty") {
                 turn_combination = [i1];
                 weight = getWeight(turn_combination);
 
                 tree["lev_" + 1 + "_turn_" + i1] = {
-                    // "value": i1,
                     "weight": weight,
                     "turn_combination": turn_combination,
                     "lev": 1
                 };
                 for (i2 = 1; i2 <= _COL_COUNT; i2++) {
-
-
-                    if ($("[data-element=" + i2 + "]").hasClass("active")) {
-
-                    } else {
+                    if (tableData[i2] === "empty") {
                         turn_combination = [i1, i2];
                         weight = getWeight(turn_combination);
 
                         tree["lev_" + 2 + "_turn_" + i1 + "_" + i2] = {
-                            // "value": i1,
                             "weight": weight,
                             "turn_combination": turn_combination,
                             "lev": 2
                         };
-                    }
 
-
-                    for (i3 = 1; i3 <= _COL_COUNT; i3++) {
-                        if ($("[data-element=" + i3 + "]").hasClass("active")) {
-
-                        } else {
-
-                            turn_combination = [i1, i2, i3];
-                            weight = getWeight(turn_combination);
-
-
-                            tree["lev_" + 3 + "_turn_" + i1 + "_" + i2 + "_" + i3] = {
-                                // "value": i1,
-                                "weight": weight,
-                                "turn_combination": turn_combination,
-                                "lev": 3
-                            };
-                        }
-
-
-                        for (i4 = 1; i4 <= _COL_COUNT; i4++) {
-                            if ($("[data-element=" + i4 + "]").hasClass("active")) {
-
-                            } else {
-
-                                turn_combination = [i1, i2, i3, i4];
+                        for (i3 = 1; i3 <= _COL_COUNT; i3++) {
+                            if (tableData[i3] === "empty") {
+                                turn_combination = [i1, i2, i3];
                                 weight = getWeight(turn_combination);
 
-
-                                tree["lev_" + 4 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
-                                    // "value": i1,
+                                tree["lev_" + 3 + "_turn_" + i1 + "_" + i2 + "_" + i3] = {
                                     "weight": weight,
                                     "turn_combination": turn_combination,
-                                    "lev": 4
+                                    "lev": 3
                                 };
+                                for (i4 = 1; i4 <= _COL_COUNT; i4++) {
+                                    if (tableData[i4] === "empty") {
+
+                                        turn_combination = [i1, i2, i3, i4];
+                                        weight = getWeight(turn_combination);
+
+
+                                        tree["lev_" + 4 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
+                                            "weight": weight,
+                                            "turn_combination": turn_combination,
+                                            "lev": 4
+                                        };
+                                    }
+                                }
                             }
 
 
-                            // for (i5 = 1; i4 <= _COL_COUNT; i5++) {
-                            //     if ($("[data-element=" + i5 + "]").hasClass("active")) {
-                            //
-                            //     } else {
-                            //
-                            //         turn_combination = [i1, i2, i3, i4, i5];
-                            //         weight = getWeight(turn_combination);
-                            //
-                            //
-                            //         tree["lev_" + 5 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4 + "_" + i5] = {
-                            //             // "value": i1,
-                            //             "weight": weight,
-                            //             "turn_combination": turn_combination,
-                            //             "lev": 5
-                            //         };
-                            //     }
-                            // }
-
-
                         }
-
                     }
 
 
