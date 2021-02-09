@@ -1,5 +1,3 @@
-//TODO FIX - ON AI RESTART - PLAYER WIN(Datatable)
-
 $(document).ready(function () {
 
     let _TURN_STATUS = "player";
@@ -9,6 +7,7 @@ $(document).ready(function () {
     const _COL_COUNT = 7;
 
     const _MINIMAX_DEPTH = 4;
+    // const _MINIMAX_DEPTH = 5;
 
     let rightElemnent;
 
@@ -295,15 +294,16 @@ $(document).ready(function () {
         console.log(tree);
 
         //TODO FIX THIS
+
         // tree = setTreeWeight(3, tree);
-        tree = setTreeWeight(2, tree);
-        tree = setTreeWeight(1, tree);
+        // tree = setTreeWeight(2, tree);
+        // tree = setTreeWeight(1, tree);
 
 
-        // let i;
-        // for (i = 1; i < _MINIMAX_DEPTH; i++) {
-        //     // setTreeWeight(i, tree);
-        // }
+        let i;
+        for (i = (_MINIMAX_DEPTH - 1); i >= 1; i--) {
+            setTreeWeight(i, tree);
+        }
 
 
         console.log(tree);
@@ -326,6 +326,7 @@ $(document).ready(function () {
 
                 el = tree[obj];
 
+                //TODO ADD NO ALL
                 if (el["lev"] === 1 && el["weight"] === 0) {
                     best_move = el["turn_combination"][0];
                 }
@@ -430,6 +431,26 @@ $(document).ready(function () {
                                                         "turn_combination": turn_combination,
                                                         "lev": 4
                                                     };
+
+
+                                                    // if (weight === 0) {
+                                                    //     for (i5 = 1; i5 <= _COL_COUNT; i5++) {
+                                                    //         if (tableData[i5] === "empty") {
+                                                    //             weight = 0;
+                                                    //             turn_combination = [i1, i2, i3, i4, i5];
+                                                    //             weight = getWeight(turn_combination);
+                                                    //
+                                                    //
+                                                    //             // tree["lev_" + 4 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
+                                                    //             tree["turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4 + "_" + i5] = {
+                                                    //                 "weight": weight,
+                                                    //                 "turn_combination": turn_combination,
+                                                    //                 "lev": 5
+                                                    //             };
+                                                    //         }
+                                                    //     }
+                                                    // }
+
                                                 }
                                             }
                                         }
@@ -535,12 +556,15 @@ $(document).ready(function () {
                 if (level % 2) {
 
                     //TODO MAYBE THERE ERROR
+
                     // weightListBest.push(getMaxOfArray(weightList))
-                    tree[obj]["weight"] = getMaxOfArray(weightList);
+                    // tree[obj]["weight"] = getMaxOfArray(weightList);
+                    tree[obj]["weight"] = getMinOfArray(weightList);
                     // tree[obj + "_" + i]["weight"] = getMinOfArray(weightList);
                 } else {
                     // weightListBest.push(getMinOfArray(weightList))
-                    tree[obj]["weight"] = getMinOfArray(weightList);
+                    // tree[obj]["weight"] = getMinOfArray(weightList);
+                    tree[obj]["weight"] = getMaxOfArray(weightList);
                     // tree[obj + "_" + i]["weight"] = getMaxOfArray(weightList);
                 }
 
