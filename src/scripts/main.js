@@ -5,8 +5,8 @@ $(document).ready(function () {
     const _ROW_COUNT = 6;
     const _COL_COUNT = 7;
 
-    // const _MINIMAX_DEPTH = 4;
-    const _MINIMAX_DEPTH = 5;
+    const _MINIMAX_DEPTH = 4;
+    // const _MINIMAX_DEPTH = 5;
 
     let rightElemnent;
 
@@ -394,22 +394,22 @@ $(document).ready(function () {
                                                         "lev": 4
                                                     };
 
-                                                    if (weight === 0) {
-                                                        for (i5 = 1; i5 <= _COL_COUNT; i5++) {
-                                                            if (tableData[i5] === "empty") {
-                                                                weight = 0;
-                                                                turn_combination = [i1, i2, i3, i4, i5];
-                                                                weight = getWeight(turn_combination);
-
-                                                                // tree["lev_" + 4 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
-                                                                tree["turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4 + "_" + i5] = {
-                                                                    "weight": weight,
-                                                                    "turn_combination": turn_combination,
-                                                                    "lev": 5
-                                                                };
-                                                            }
-                                                        }
-                                                    }
+                                                    // if (weight === 0) {
+                                                    //     for (i5 = 1; i5 <= _COL_COUNT; i5++) {
+                                                    //         if (tableData[i5] === "empty") {
+                                                    //             weight = 0;
+                                                    //             turn_combination = [i1, i2, i3, i4, i5];
+                                                    //             weight = getWeight(turn_combination);
+                                                    //
+                                                    //             // tree["lev_" + 4 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
+                                                    //             tree["turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4 + "_" + i5] = {
+                                                    //                 "weight": weight,
+                                                    //                 "turn_combination": turn_combination,
+                                                    //                 "lev": 5
+                                                    //             };
+                                                    //         }
+                                                    //     }
+                                                    // }
 
                                                 }
                                             }
@@ -429,8 +429,7 @@ $(document).ready(function () {
 
     //Check win status
     function getWeight(turn_combination) {
-
-        let _TURN_STATUS_SAVE = $.extend(true, {}, _TURN_STATUS);
+        let _TURN_STATUS_SAVE = _TURN_STATUS;
         let tableDataSave = JSON.parse(JSON.stringify(tableData));
 
         let playerResult;
@@ -473,7 +472,7 @@ $(document).ready(function () {
             }
         });
 
-        _TURN_STATUS = $.extend(true, {}, _TURN_STATUS_SAVE);
+        _TURN_STATUS = _TURN_STATUS_SAVE;
 
         tableData = tableDataSave;
 
