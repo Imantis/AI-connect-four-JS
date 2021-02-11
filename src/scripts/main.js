@@ -127,6 +127,7 @@ $(document).ready(function () {
         return winStatus;
     }
 
+    //Give element which shall be activated after click
     function getRightElement(clickedElement) {
         let id = clickedElement.data("element");
         let currentElement = clickedElement;
@@ -149,6 +150,7 @@ $(document).ready(function () {
         return "Error";
     }
 
+    //Give element number(id) which shall be activated after click
     function getRightElementNumber(clickedElementId) {
         let currentElementID = clickedElementId;
         let previousElementID;
@@ -170,6 +172,7 @@ $(document).ready(function () {
         return "Error";
     }
 
+    //Player click
     $(".element").click(function () {
         //CHECK GAME END
         let i;
@@ -226,6 +229,7 @@ $(document).ready(function () {
         }
     });
 
+    //AI turn
     function aiTurn() {
         //CHECK GAME END
         let i;
@@ -256,6 +260,7 @@ $(document).ready(function () {
         }
     }
 
+    //Minimax algoritmm
     function minimaxChoose() {
         console.log("Turn status on start " + _TURN_STATUS);
 
@@ -323,6 +328,7 @@ $(document).ready(function () {
 
     }
 
+    //Create tree
     function createTree(tree) {
         let i1;
         let i2;
@@ -421,6 +427,7 @@ $(document).ready(function () {
 
     }
 
+    //Check win status
     function getWeight(turn_combination) {
 
         let _TURN_STATUS_SAVE = $.extend(true, {}, _TURN_STATUS);
@@ -473,6 +480,7 @@ $(document).ready(function () {
         return weight;
     }
 
+    //Hierarchical weight set
     function setTreeWeight(level, tree) {
         let obj;
         let el;
