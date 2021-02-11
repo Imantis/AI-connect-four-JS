@@ -1,13 +1,12 @@
 $(document).ready(function () {
-
     let _TURN_STATUS = "player";
     // var _TURN_STATUS = "ai";
 
     const _ROW_COUNT = 6;
     const _COL_COUNT = 7;
 
-    const _MINIMAX_DEPTH = 4;
-    // const _MINIMAX_DEPTH = 5;
+    // const _MINIMAX_DEPTH = 4;
+    const _MINIMAX_DEPTH = 5;
 
     let rightElemnent;
 
@@ -103,8 +102,6 @@ $(document).ready(function () {
 
         winExamples.forEach((winCombination) => {
             winCombination.forEach((element) => {
-
-                // if ($("[data-element=" + element + "]").hasClass(playerOrAIName)) {
                 if (tableData[element] === playerOrAIName) {
                     roundsInRow++;
                 } else {
@@ -112,7 +109,6 @@ $(document).ready(function () {
                     return null;
                 }
             });
-
             if (roundsInRow >= 4) {
                 winStatus = true;
                 return null;
@@ -125,27 +121,20 @@ $(document).ready(function () {
             } else if (playerOrAIRounds.first().hasClass("active-ai")) {
                 alert("AI win!");
             }
-
             $(".element").addClass("active");
         }
 
         return winStatus;
-
-
     }
 
     function getRightElement(clickedElement) {
-        // console.log(clickedElement.data("element"));
-
         let id = clickedElement.data("element");
         let currentElement = clickedElement;
         let previousElement;
 
-
         if (id >= _ROW_COUNT * _COL_COUNT - _ROW_COUNT) {
             return currentElement;
         }
-
 
         while (id <= _COL_COUNT * _ROW_COUNT) {
             id = id + _COL_COUNT;
@@ -153,7 +142,6 @@ $(document).ready(function () {
 
             currentElement = $("[data-element=" + id + "]");
             if (!currentElement.length || currentElement.hasClass("active")) {
-                // console.log("This ID dont exist or active - " + id);
                 return previousElement;
             }
         }
@@ -165,16 +153,13 @@ $(document).ready(function () {
         let currentElementID = clickedElementId;
         let previousElementID;
 
-
         if (currentElementID >= _ROW_COUNT * _COL_COUNT - _ROW_COUNT) {
             return currentElementID;
         }
 
-
         while (currentElementID <= _COL_COUNT * _ROW_COUNT) {
             previousElementID = currentElementID;
             currentElementID = currentElementID + _COL_COUNT;
-
 
             if (tableData[currentElementID] === "active-ai" || tableData[currentElementID] === "active-player" || tableData[currentElementID] === undefined) {
                 // console.log("getRightElementNumber - " + previousElementID);
@@ -201,7 +186,6 @@ $(document).ready(function () {
 
                 tableData[rightElemnent.attr("data-element")] = "active-player";
 
-
                 _TURN_STATUS = "ai";
                 winStatus = checkWin("active-player");
             }
@@ -211,20 +195,9 @@ $(document).ready(function () {
             if (!winStatus) {
                 aiTurn();
                 //TODO CHECK GAME END
-
-                // setTimeout(() => {
-                //     aiTurn();
-                // }, 1);
-                // let turn_combination = [3, 1, 3, 7, 3, 2, 3];
-                //
-                // console.log(turn_combination);
-                //
-                // console.log(getWeight(turn_combination));
-                // console.log(getRightElementNumber(22));
             }
 
         } else {
-
             // //Second player
             // rightElemnent = getRightElement($(this));
             //
@@ -242,10 +215,6 @@ $(document).ready(function () {
             // }
         }
     });
-
-    function getRandomInt(max) {
-        return Math.floor(Math.random() * Math.floor(max));
-    }
 
     function aiTurn() {
         let click_choose = minimaxChoose();
@@ -266,9 +235,6 @@ $(document).ready(function () {
 
     function minimaxChoose() {
         console.log("Turn status on start " + _TURN_STATUS);
-        let roadBest = [];
-        // let tableDataSave = tableData;
-
 
         let tree = [];
 
@@ -279,36 +245,17 @@ $(document).ready(function () {
         let el;
 
         let best_move = 0;
-        // console.log(tree);
 
-
-        // stateScore = Math.min(...newStateScores);
-
-
-        // _TURN_STATUS = _TURN_STATUS_SAVE;
-        // _TURN_STATUS = $.extend(true, {}, _TURN_STATUS_SAVE);
-
-        // tableData = tableDataSave;
-        // _TURN_STATUS = _TURN_STATUS_SAVE;
         console.log(tableData);
         console.log(tree);
 
-        // tree = setTreeWeight(3, tree);
-        // tree = setTreeWeight(2, tree);
-        // tree = setTreeWeight(1, tree);
-
-
         let i;
         for (i = (_MINIMAX_DEPTH - 1); i >= 1; i--) {
-            // TODO FIX (Something not correct)
-
             setTreeWeight(i, tree);
         }
 
-
         console.log(tree);
 
-        //Search 1 result
         for (obj in tree) {
             el = tree[obj];
 
@@ -318,7 +265,6 @@ $(document).ready(function () {
         }
 
         //Search 0 result
-
         if (best_move === 0) {
             for (obj in tree) {
 
@@ -347,18 +293,8 @@ $(document).ready(function () {
         }
 
         if (best_move === 0) {
-
-            // alert("Game finished");
-            // alert("Game finished");
             best_move = 1;
         }
-        // if (roadBest[0]) {
-        //     console.log("AI MOVE!");
-        //     return roadBest[0];
-        // } else {
-        //     // return getRandomInt(7) + 1;
-        //     return 3;
-        // }
 
         return best_move;
 
@@ -373,9 +309,8 @@ $(document).ready(function () {
         let weight;
         let turn_combination;
 
-//need recursive change
+        //need recursive change
         for (i1 = 1; i1 <= _COL_COUNT; i1++) {
-            // if (!$("[data-element=" + i1 + "]").hasClass("active")) {
             if (tableData[i1] === "empty") {
                 weight = 0;
                 turn_combination = [i1];
@@ -423,7 +358,6 @@ $(document).ready(function () {
                                                     turn_combination = [i1, i2, i3, i4];
                                                     weight = getWeight(turn_combination);
 
-
                                                     // tree["lev_" + 4 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
                                                     tree["turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
                                                         "weight": weight,
@@ -431,14 +365,12 @@ $(document).ready(function () {
                                                         "lev": 4
                                                     };
 
-
                                                     if (weight === 0) {
                                                         for (i5 = 1; i5 <= _COL_COUNT; i5++) {
                                                             if (tableData[i5] === "empty") {
                                                                 weight = 0;
                                                                 turn_combination = [i1, i2, i3, i4, i5];
                                                                 weight = getWeight(turn_combination);
-
 
                                                                 // tree["lev_" + 4 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
                                                                 tree["turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4 + "_" + i5] = {
@@ -474,7 +406,6 @@ $(document).ready(function () {
         let playerResult;
         let aiResult;
         let weight = 0;
-
 
         turn_combination.forEach(element => {
 
@@ -512,9 +443,6 @@ $(document).ready(function () {
             }
         });
 
-        // console.log(tableData);
-
-
         _TURN_STATUS = $.extend(true, {}, _TURN_STATUS_SAVE);
 
         tableData = tableDataSave;
@@ -523,19 +451,9 @@ $(document).ready(function () {
     }
 
     function setTreeWeight(level, tree) {
-        // Object.keys(tree).forEach(function (key) {
-        //     var value = tree[key];
-        //     console.log(key);
-        // });
-
-
-        // tree["turn_1"]["weight"] = 9;
-
         let obj;
         let el;
         let i;
-        let roadBest = [];
-        let weightListBest = [];
 
         for (obj in tree) {
 
@@ -544,33 +462,22 @@ $(document).ready(function () {
             el = tree[obj];
 
             if (el["lev"] === level && el["weight"] === 0) {
-                // roadBest = el["turn_combination"];
-                // break;
                 for (i = 1; i <= _COL_COUNT; i++) {
-                    // console.log(obj + "_" + i);
-
-                    weightList.push(tree[obj + "_" + i]["weight"]);
+                    if (tableData[i] === "active-ai" || tableData[i] === "active-player" || tableData[i] === undefined) {
+                        //Do nothing
+                    } else {
+                        weightList.push(tree[obj + "_" + i]["weight"]);
+                    }
                 }
 
-
-                if (level % 2) {
-//For 1 and 3 level
-
-                    // weightListBest.push(getMaxOfArray(weightList))
-                    // tree[obj]["weight"] = getMaxOfArray(weightList);
-                    tree[obj]["weight"] = getMinOfArray(weightList);
-                    // tree[obj + "_" + i]["weight"] = getMinOfArray(weightList);
-                } else {
-                    // weightListBest.push(getMinOfArray(weightList))
-                    // tree[obj]["weight"] = getMinOfArray(weightList);
-                    tree[obj]["weight"] = getMaxOfArray(weightList);
-                    // tree[obj + "_" + i]["weight"] = getMaxOfArray(weightList);
+                if (weightList !== []) {
+                    if (level % 2) {
+                        //For 1 and 3 level
+                        tree[obj]["weight"] = getMinOfArray(weightList);
+                    } else {
+                        tree[obj]["weight"] = getMaxOfArray(weightList);
+                    }
                 }
-
-                // console.log(obj + "_" + i);
-                // tree[obj]["weight"] = 9;
-
-                // console.log(obj + "_" + i);
             }
         }
 
