@@ -293,8 +293,6 @@ $(document).ready(function () {
         console.log(tableData);
         console.log(tree);
 
-        //TODO FIX THIS
-
         // tree = setTreeWeight(3, tree);
         // tree = setTreeWeight(2, tree);
         // tree = setTreeWeight(1, tree);
@@ -302,6 +300,8 @@ $(document).ready(function () {
 
         let i;
         for (i = (_MINIMAX_DEPTH - 1); i >= 1; i--) {
+            // TODO FIX (Something not correct)
+
             setTreeWeight(i, tree);
         }
 
@@ -326,7 +326,6 @@ $(document).ready(function () {
 
                 el = tree[obj];
 
-                //TODO ADD NO ALL
                 if (el["lev"] === 1 && el["weight"] === 0) {
                     best_move = el["turn_combination"][0];
                 }
@@ -433,23 +432,23 @@ $(document).ready(function () {
                                                     };
 
 
-                                                    // if (weight === 0) {
-                                                    //     for (i5 = 1; i5 <= _COL_COUNT; i5++) {
-                                                    //         if (tableData[i5] === "empty") {
-                                                    //             weight = 0;
-                                                    //             turn_combination = [i1, i2, i3, i4, i5];
-                                                    //             weight = getWeight(turn_combination);
-                                                    //
-                                                    //
-                                                    //             // tree["lev_" + 4 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
-                                                    //             tree["turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4 + "_" + i5] = {
-                                                    //                 "weight": weight,
-                                                    //                 "turn_combination": turn_combination,
-                                                    //                 "lev": 5
-                                                    //             };
-                                                    //         }
-                                                    //     }
-                                                    // }
+                                                    if (weight === 0) {
+                                                        for (i5 = 1; i5 <= _COL_COUNT; i5++) {
+                                                            if (tableData[i5] === "empty") {
+                                                                weight = 0;
+                                                                turn_combination = [i1, i2, i3, i4, i5];
+                                                                weight = getWeight(turn_combination);
+
+
+                                                                // tree["lev_" + 4 + "_turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4] = {
+                                                                tree["turn_" + i1 + "_" + i2 + "_" + i3 + "_" + i4 + "_" + i5] = {
+                                                                    "weight": weight,
+                                                                    "turn_combination": turn_combination,
+                                                                    "lev": 5
+                                                                };
+                                                            }
+                                                        }
+                                                    }
 
                                                 }
                                             }
@@ -553,9 +552,9 @@ $(document).ready(function () {
                     weightList.push(tree[obj + "_" + i]["weight"]);
                 }
 
-                if (level % 2) {
 
-                    //TODO MAYBE THERE ERROR
+                if (level % 2) {
+//For 1 and 3 level
 
                     // weightListBest.push(getMaxOfArray(weightList))
                     // tree[obj]["weight"] = getMaxOfArray(weightList);
