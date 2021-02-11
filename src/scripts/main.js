@@ -171,6 +171,19 @@ $(document).ready(function () {
     }
 
     $(".element").click(function () {
+        //CHECK GAME END
+        let i;
+        let drawStatus = true;
+        for (i = 1; i <= _COL_COUNT; i++) {
+            if (tableData[i] === "empty") {
+                drawStatus = false;
+            }
+        }
+
+        if (drawStatus) {
+            return;
+        }
+
         if ($(this).hasClass("active")) {
             return;
         }
@@ -190,11 +203,8 @@ $(document).ready(function () {
                 winStatus = checkWin("active-player");
             }
 
-            //TODO CHECK GAME END
-
             if (!winStatus) {
                 aiTurn();
-                //TODO CHECK GAME END
             }
 
         } else {
@@ -217,6 +227,19 @@ $(document).ready(function () {
     });
 
     function aiTurn() {
+        //CHECK GAME END
+        let i;
+        let drawStatus = true;
+        for (i = 1; i <= _COL_COUNT; i++) {
+            if (tableData[i] === "empty") {
+                drawStatus = false;
+            }
+        }
+
+        if (drawStatus) {
+            return;
+        }
+
         let click_choose = minimaxChoose();
 
         rightElemnent = getRightElement($("[data-element=" + click_choose + "]"));
