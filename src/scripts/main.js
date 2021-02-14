@@ -95,10 +95,10 @@ $(document).ready(function () {
         aiTurn();
     });
 
+    //Check win
     function checkWin(playerOrAIName, type) {
         let roundsInRow = 0;
         let winStatus = false;
-        let playerOrAIRounds = $("." + playerOrAIName);
 
         winExamples.forEach((winCombination) => {
             winCombination.forEach((element) => {
@@ -116,6 +116,7 @@ $(document).ready(function () {
         });
 
         if (winStatus && type !== "future") {
+            let playerOrAIRounds = $("." + playerOrAIName);
             if (playerOrAIRounds.first().hasClass("active-player")) {
                 alert("Player win!");
             } else if (playerOrAIRounds.first().hasClass("active-ai")) {
@@ -318,10 +319,6 @@ $(document).ready(function () {
                     best_move = el["turn_combination"][0];
                 }
             }
-        }
-
-        if (best_move === 0) {
-            best_move = 1;
         }
 
         return best_move;
