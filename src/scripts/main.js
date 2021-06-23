@@ -230,6 +230,11 @@ $(document).ready(function () {
         }
     });
 
+
+    function getRndInteger(min, max) {
+        return Math.floor(Math.random() * (max - min) ) + min;
+    }
+
     //AI turn
     function aiTurn() {
         //CHECK GAME END
@@ -245,7 +250,14 @@ $(document).ready(function () {
             return;
         }
 
-        let click_choose = minimaxChoose();
+        let click_choose;
+        if(tableData[36]==="empty" && tableData[37]==="empty" && tableData[38]==="empty" && tableData[39]==="empty" && tableData[40]==="empty" && tableData[41]==="empty" && tableData[42]==="empty"){
+            click_choose = getRndInteger(1,7);
+        }else{
+            click_choose = minimaxChoose();
+        }
+
+
 
         rightElemnent = getRightElement($("[data-element=" + click_choose + "]"));
 
